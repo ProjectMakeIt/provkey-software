@@ -176,9 +176,15 @@ class PyGameMenuController(Controller):
 
 class OledMenuController(Controller):
   def __init__(self,menu,display,upin,dpin,epin,bpin):
-    GPIO = __import__('RPi.GPIO')
+    RPi = __import__('RPi.GPIO')
+    GPIO = RPi.GPIO
     Controller.__init__(self,menu)
     self.disp = display
+    GPIO.setmode(GPIO.BCM)
+    GPIO.setup(upin,GPIO.IN, pull_up_down=GPIO.PUD_UP)
+    GPIO.setup(dpin,GPIO.IN, pull_up_down=GPIO.PUD_UP)
+    GPIO.setup(epin,GPIO.IN, pull_up_down=GPIO.PUD_UP)
+    GPIO.setup(bpin,GPIO.IN, pull_up_down=GPIO.PUD_UP)
     GPIO.add_event_detect(upin, edge=GPIO.RISING, callback=self.up, bouncetime=200)
     GPIO.add_event_detect(dpin, edge=GPIO.RISING, callback=self.down, bouncetime=200)
     GPIO.add_event_detect(epin, edge=GPIO.RISING, callback=self.enter, bouncetime=200)
