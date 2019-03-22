@@ -12,17 +12,6 @@ from PIL import Image
 from PIL import ImageDraw
 from PIL import ImageFont
 
-def killhandle(signum, frame):
-  exit(0)
-
-root = Menu()
-load = ProgressMenu('scale.bmp',50,root)
-setup = Menu()
-info = Menu(True,4)
-root.addLine(MenuEntry('Setup',setup))
-setup.addLine(MenuEntry('Status',info))
-setup.addLine(MenuEntry('back',root))
-
 def ip_render():
     cmd = "hostname -I | cut -d\' \' -f1"
     return subprocess.check_output(cmd, shell = True)
@@ -39,20 +28,15 @@ def disk_render():
     cmd = "df -h | awk '$NF==\"/\"{printf \"Disk: %d/%dGB %s\", $3,$2,$5}'"
     return subprocess.check_output(cmd, shell = True)
 
+root = Menu()
+load = ProgressMenu('scale.bmp',50,root)
+setup = Menu()
+info = Menu(True,4)
+root.addLine(MenuEntry('Setup',setup))
+setup.addLine(MenuEntry('Status',info))
+setup.addLine(MenuEntry('back',root))
 info.addLine(MenuCustom(ip_render),False)
 info.addLine(MenuCustom(cpu_render),False)
 info.addLine(MenuCustom(cmd_render),False)
 info.addLine(MenuCustom(disk_render),False)
 info.addLine(MenuEntry('back',setup))
-
-controller = PyGameMenuController(load)
-load.setCtl(controller)
-
-if __name__ == "__main__":
-    signal.signal(signal.SIGTERM, killhandle)
-    try:
-      while True:
-        controller.loop()
-        time.sleep(0.05)
-    except (KeyboardInterrupt, SystemExit):
-      killhandle(1,0)
