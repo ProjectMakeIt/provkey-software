@@ -1,17 +1,23 @@
-import time
+import time,os
 import signal
 
 from RPi import GPIO
 
 import Adafruit_SSD1306
 
-from menus import load
-from menu import OledMenuController
+from libs.menu import OledMenuController
+from menus import getMenus
 
 def killhandle(signum, frame):
   GPIO.cleanup()
   exit(0)
 
+def shutdown():
+    os.system('shutdown -h now')
+    killhandle(0,0);
+
+
+load = getMenus(shutdown)
 disp = Adafruit_SSD1306.SSD1306_128_64(rst=24)
 controller = OledMenuController(load,disp,17,22,5,6)
 load.setCtl(controller)
