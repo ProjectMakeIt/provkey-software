@@ -5,7 +5,7 @@ import subprocess
 
 import signal
 
-from menu import Menu, PyGameMenuController, MenuLine, MenuEntry, MenuText, MenuCustom
+from menu import Menu, PyGameMenuController, MenuLine, MenuEntry, MenuText, MenuCustom, ProgressMenu
 from progress import ProgressImage
 
 from PIL import Image
@@ -16,6 +16,7 @@ def killhandle(signum, frame):
   exit(0)
 
 root = Menu()
+load = ProgressMenu('scale.bmp',50,root)
 setup = Menu()
 info = Menu(True,4)
 root.addLine(MenuEntry('Setup',setup))
@@ -44,13 +45,14 @@ info.addLine(MenuCustom(cmd_render),False)
 info.addLine(MenuCustom(disk_render),False)
 info.addLine(MenuEntry('back',setup))
 
-controller = PyGameMenuController(root)
+controller = PyGameMenuController(load)
+load.setCtl(controller)
 
 if __name__ == "__main__":
     signal.signal(signal.SIGTERM, killhandle)
     try:
       while True:
         controller.loop()
-        time.sleep(0.01)
+        time.sleep(0.05)
     except (KeyboardInterrupt, SystemExit):
       killhandle(1,0)

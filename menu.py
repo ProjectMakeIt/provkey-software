@@ -1,6 +1,7 @@
 from PIL import Image
 from PIL import ImageDraw
 from PIL import ImageFont
+from progress import ProgressImage
 
 font = ImageFont.load_default()
 
@@ -61,6 +62,21 @@ class Menu:
     return self.currentLine
   def setPos(self,line):
     self.currentLine=line
+
+class ProgressMenu(Menu):
+  def __init__(self,image,count,nextMenu):
+      Menu.__init__(self,navigatable=False,firstEntry=0)
+      self.loader = ProgressImage(image,count)
+      self.nextMenu = nextMenu
+  def setCtl(self,ctl):
+      self.ctl = ctl
+  def render(self):
+    try:
+      self.img = self.loader.next()
+    except StopIteration as e:
+      self.ctl.rootMenu = self.nextMenu
+      self.ctl.changeMenu(self.nextMenu)
+    return self.img
 
 class MenuLine:
   def __init__(self,label,cb):

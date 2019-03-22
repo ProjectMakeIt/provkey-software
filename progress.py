@@ -12,4 +12,5 @@ class ProgressImage:
         raise StopIteration
     j = 255-self.count
     self.count+=1
+    print(self.count)
     return self.scale.point(lambda p: p > j and 255).convert('1')
