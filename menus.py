@@ -45,11 +45,11 @@ def enable_wifi_network():
     os.system(cmd)
 
 def enable_gadget():
-    cmd = "echo '20980000.usb' | tee /sys/kernel/config/usb_gadget/provkey/UDC"
+    cmd = "echo '20980000.usb' | sudo tee /sys/kernel/config/usb_gadget/provkey/UDC"
     os.system(cmd)
 
 def disable_gadget():
-    cmd = "echo '' | tee /sys/kernel/config/usb_gadget/provkey/UDC"
+    cmd = "echo '' | sudo tee /sys/kernel/config/usb_gadget/provkey/UDC"
     os.system(cmd)
 
 def getMenus(shutdown):
