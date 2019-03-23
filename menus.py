@@ -37,11 +37,11 @@ def enable_usb_network():
     os.system(cmd)
 
 def disable_wifi_network():
-    cmd = "sudo ifconfig wifi0 down"
+    cmd = "sudo ifconfig wlan0 down"
     os.system(cmd)
 
 def enable_wifi_network():
-    cmd = "sudo ifconfig wifi0 up"
+    cmd = "sudo ifconfig wlan0 up"
     os.system(cmd)
 
 def enable_gadget():

@@ -13,7 +13,7 @@ def killhandle(signum, frame):
   exit(0)
 
 def shutdown():
-    os.system('shutdown -h now')
+    os.system('sudo shutdown -h now')
     killhandle(0,0);
 
 
