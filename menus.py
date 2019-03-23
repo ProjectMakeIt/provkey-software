@@ -5,7 +5,7 @@ import subprocess
 
 import signal
 
-from libs.menu import Menu, PyGameMenuController, MenuLine, MenuEntry, MenuText, MenuCustom, ProgressMenu
+from libs.menu import Menu, PyGameMenuController, MenuLine, MenuEntry, MenuText, MenuCustom, ProgressLine, LoaderMenu
 from libs.progress import ProgressImage
 
 from PIL import Image
@@ -54,27 +54,32 @@ def disable_gadget():
 
 def getMenus(shutdown):
     root = Menu()
-    load = ProgressMenu('images/scale.bmp',50,root)
+    load = LoaderMenu('images/scale.bmp',50,root)
     setup = Menu()
     network = Menu()
     usb = Menu()
     info = Menu(True,4)
     testMenu = Menu()
+    progress = Menu()
+    progressLine = ProgressLine(10)
+    progressLine.update(9)
+    progress.addLine(progressLine)
+    progress.addLine(MenuEntry('back',testMenu))
     root.addLine(MenuEntry('Setup',setup))
-    #root.addLine(MenuEntry('Test Menu',testMenu))
+    root.addLine(MenuEntry('Test Menu',testMenu))
     root.addLine(MenuLine('Exit',shutdown))
-    testMenu.addLine(MenuText('Test1'))
-    testMenu.addLine(MenuText('Test2'))
-    testMenu.addLine(MenuText('Test3'))
-    testMenu.addLine(MenuText('Test4'))
-    testMenu.addLine(MenuText('Test5'))
-    testMenu.addLine(MenuText('Test6'))
-    testMenu.addLine(MenuText('Test7'))
-    testMenu.addLine(MenuText('Test8'))
-    testMenu.addLine(MenuText('Test9'))
-    testMenu.addLine(MenuText('Test10'))
-    testMenu.addLine(MenuText('Test11'))
-    testMenu.addLine(MenuText('Test12'))
+    testMenu.addLine(MenuEntry('Test Loader',load))
+    testMenu.addLine(MenuEntry('Test Progress',progress))
+    testMenu.addLine('Test3')
+    testMenu.addLine('Test4')
+    testMenu.addLine('Test5')
+    testMenu.addLine('Test6')
+    testMenu.addLine('Test7')
+    testMenu.addLine('Test8')
+    testMenu.addLine('Test9')
+    testMenu.addLine('Test10')
+    testMenu.addLine('Test11')
+    testMenu.addLine('Test12')
     testMenu.addLine(MenuEntry('back',root))
     setup.addLine(MenuEntry('Status',info))
     setup.addLine(MenuEntry('Network',network))

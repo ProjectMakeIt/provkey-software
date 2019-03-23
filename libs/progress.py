@@ -7,6 +7,8 @@ class ProgressImage:
     self.size = size
   def __iter__(self):
     return self
+  def reset(self):
+    self.count = 0
   def next(self):
     if self.count > self.size:
         raise StopIteration

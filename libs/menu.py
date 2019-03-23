@@ -1,3 +1,5 @@
+from __future__ import division
+
 from PIL import Image
 from PIL import ImageDraw
 from PIL import ImageFont
@@ -80,13 +82,15 @@ class Menu:
   def setPos(self,line):
     self.currentLine=line
 
-class ProgressMenu(Menu):
+class LoaderMenu(Menu):
   def __init__(self,image,count,nextMenu):
       Menu.__init__(self,navigatable=False,firstEntry=0)
       self.loader = ProgressImage(image,count)
       self.nextMenu = nextMenu
   def setCtl(self,ctl):
       self.ctl = ctl
+  def reset(self):
+      self.loader.reset()
   def render(self):
     try:
       self.img = self.loader.next()
@@ -113,6 +117,31 @@ class MenuLine:
     draw.rectangle((0,0,128,10), outline=0, fill=0)
     draw.rectangle((0,0,128,10), outline=0, fill=box)
     draw.text((3, 0), str(self.label), font=font, fill=text)
+    return img
+
+class ProgressLine(MenuLine):
+  def __init__(self,mx):
+    self.max = mx
+    self.current = 0
+  def update(self,current):
+    self.current = current;
+  def execute(self,ctl):
+    pass
+  def render(self,current):
+    img = Image.new('1', (128,10))
+    if current:
+      box=255
+      text=0
+    else:
+      box=0
+      text=255
+    percent = self.current/self.max
+    size = 124*percent
+    draw = ImageDraw.Draw(img)
+    draw.rectangle((0,0,128,10), fill=box)
+    draw.rectangle((1,1,126,8), fill=text)
+    draw.rectangle((2,2,125,7), fill=box)
+    draw.rectangle((3,3,size,6), fill=text)
     return img
 
 class MenuEntry(MenuLine):
