@@ -30,15 +30,19 @@ def disk_render():
 
 def disable_usb_network():
     cmd = "sudo ifconfig usb0 down"
+    os.system(cmd)
 
 def enable_usb_network():
     cmd = "sudo ifconfig usb0 up"
+    os.system(cmd)
 
 def disable_wifi_network():
     cmd = "sudo ifconfig wifi0 down"
+    os.system(cmd)
 
 def enable_wifi_network():
     cmd = "sudo ifconfig wifi0 up"
+    os.system(cmd)
 
 def getMenus(shutdown):
     root = Menu()
