@@ -13,6 +13,7 @@ class Menu:
     self.currentLine=firstEntry
     self.navigatable=navigatable
     self.img = Image.new('1', (128,64))
+    self.firstLine = 0
   def reset(self):
     self.currentLine=self.firstEntry
   def addLine(self,line,selectable=True):
@@ -22,16 +23,22 @@ class Menu:
     if not self.navigatable:
       return
     self.currentLine+=1
+    if self.firstLine<self.currentLine-5:
+        self.firstLine=self.currentLine-5
     if self.currentLine>len(self.lines)-1:
       self.currentLine=0
+      self.firstLine=0
     if not self.selectable[self.currentLine]:
       self.down()
   def up(self):
     if not self.navigatable:
       return
     self.currentLine-=1
+    if self.firstLine>self.currentLine:
+        self.firstLine=self.currentLine
     if self.currentLine<0:
       self.currentLine=len(self.lines)-1
+      self.firstLine=self.currentLine-5
     if not self.selectable[self.currentLine]:
       self.up()
   def enter(self,ctl):
@@ -41,15 +48,19 @@ class Menu:
   def render(self):
     draw = ImageDraw.Draw(self.img)
     draw.rectangle((0,0,128,64), outline=0, fill=0)
-    for i,line in enumerate(self.lines):
-      if self.currentLine==i:
+    selectLine = self.currentLine-self.firstLine
+    for i in xrange(0,6) :
+      if len(self.lines)-1 < i:
+          continue
+      line = self.lines[i+self.firstLine]
+      if selectLine==i:
         box=255
         text=0
       else:
         box=0
         text=255
       if isinstance(line,MenuLine):
-        image=line.render(self.currentLine==i)
+        image=line.render(selectLine==i)
         mask = Image.new('1',(128,64))
         maskDraw = ImageDraw.Draw(mask)
         maskDraw.rectangle((0,(i*10),128,(i*10)+10), outline=0, fill=255)
