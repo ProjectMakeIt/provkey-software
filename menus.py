@@ -65,7 +65,7 @@ def getMenus(shutdown):
     root.addLine(MenuLine('Exit',shutdown))
     setup.addLine(MenuEntry('Status',info))
     setup.addLine(MenuEntry('Network',network))
-    setup.addLine(MenuEntry('Gadget',gadget))
+    setup.addLine(MenuEntry('Gadget',usb))
     setup.addLine(MenuEntry('back',root))
     network.addLine(MenuEntry('Wifi',wifi))
     network.addLine(MenuEntry('Usb',usbNet))
