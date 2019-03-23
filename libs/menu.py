@@ -16,6 +16,9 @@ class Menu:
     self.firstLine = 0
   def reset(self):
     self.currentLine=self.firstEntry
+    self.firstLine = 0
+    if self.firstLine<self.currentLine-5:
+        self.firstLine=self.currentLine-5
   def addLine(self,line,selectable=True):
     self.lines.append(line)
     self.selectable.append(selectable)
@@ -38,7 +41,10 @@ class Menu:
         self.firstLine=self.currentLine
     if self.currentLine<0:
       self.currentLine=len(self.lines)-1
-      self.firstLine=self.currentLine-5
+      if len(self.lines)-6<0:
+        self.firstLine=0
+      else:
+        self.firstLine=len(self.lines)-6
     if not self.selectable[self.currentLine]:
       self.up()
   def enter(self,ctl):
