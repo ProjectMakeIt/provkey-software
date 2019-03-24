@@ -1,9 +1,9 @@
-def disable():
-    with open('/sys/kernel/config/usb_gadget/provkey/UDC','w') as f:
-        f.write('')
-        f.close()
+import os
 
+GADGET_URL = "/sys/kernel/config/usb_gadget"
+device_base = os.path.join(GADGET_URL, 'provkey')
+
+def disable():
+    os.system('echo "" > %s' % os.path.join(device_base, 'UDC'))    
 def enable():
-    with open('/sys/kernel/config/usb_gadget/provkey/UDC','w') as f:
-        f.write('20980000.usb')
-        f.close()
+    os.system('ls /sys/class/udc > %s' % os.path.join(device_base, 'UDC'))    
