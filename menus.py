@@ -8,6 +8,8 @@ import signal
 from libs.menu import Menu, PyGameMenuController, MenuLine, MenuEntry, MenuText, MenuCustom, ProgressLine, LoaderMenu
 from libs.progress import ProgressImage
 
+import gadget
+
 from PIL import Image
 from PIL import ImageDraw
 from PIL import ImageFont
@@ -45,12 +47,10 @@ def enable_wifi_network():
     os.system(cmd)
 
 def enable_gadget():
-    cmd = "echo '20980000.usb' | sudo tee /sys/kernel/config/usb_gadget/provkey/UDC"
-    os.system(cmd)
+    gadget.enable()
 
 def disable_gadget():
-    cmd = "echo '' | sudo tee /sys/kernel/config/usb_gadget/provkey/UDC"
-    os.system(cmd)
+    gadget.disable()
 
 def getMenus(shutdown):
     root = Menu()
