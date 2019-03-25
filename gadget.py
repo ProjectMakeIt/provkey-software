@@ -10,5 +10,5 @@ def enable():
 
 def changeImage(filename):
     disable()
-    os.system('echo "'+filename+'" > %s' % os.path.join(device_base, 'functions','mass_storage.usb0','lun.0'))
+    os.system('echo "'+filename+'" > %s' % os.path.join(device_base, 'functions','mass_storage.usb0','lun.0','file'))
     enable()
