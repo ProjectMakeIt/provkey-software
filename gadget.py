@@ -7,3 +7,8 @@ def disable():
     os.system('echo "" > %s' % os.path.join(device_base, 'UDC'))    
 def enable():
     os.system('ls /sys/class/udc > %s' % os.path.join(device_base, 'UDC'))    
+
+def changeImage(filename):
+    disable()
+    os.system('echo "'+filename+'" > %s' % os.path.join(device_base, 'functions','mass_storage.usb0','lun.0'))
+    enable()

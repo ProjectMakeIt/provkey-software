@@ -9,13 +9,15 @@ class Config:
         self._storage = storage
     def load(self):
         for name,setup in self._storage.load().items():
-            self._config_object[name]=Setup(name,setup)
+            self._config_object[name]=Setup(setup)
     def save(self):
         if not self._storage:
             raise ConfigError("No Storage Module Loaded")
         self._storage.save(self._config_object)
     def get(self,name):
         return self._config_object[name]
+    def getAll(self):
+        return self._config_object
     def store(self,name,setup):
         self._config_object[name]=setup
 

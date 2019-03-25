@@ -7,6 +7,7 @@ import signal
 
 from libs.menu import Menu, PyGameMenuController, MenuLine, MenuEntry, MenuText, MenuCustom, ProgressLine, LoaderMenu
 from libs.progress import ProgressImage
+from libs.config import Config, ConfigJson
 
 import gadget
 
@@ -36,7 +37,27 @@ def enable_gadget():
 def disable_gadget():
     gadget.disable()
 
+def generate_setup(name,setup):
+    menu = Menu()
+    line = MenuEntry(name,menu)
+    menu.addLine(MenuLine('Switch Image',lambda: gadget.changeImage(setup.image)))
+    return line
+
+def get_setups(config):
+    menu = Menu()
+    for name,setup in config.getAll().items():
+       menu.addLine(generate_setup(name,setup))
+    return menu
+
+def setupConfig():
+    config = Config()
+    config.setStorage(ConfigJson('config.json'))
+    if os.path.exists('config.json'):
+        config.load()
+    return config
+    
 def getMenus(shutdown):
+    config = setupConfig()
     root = Menu()
     load = LoaderMenu('images/scale.bmp',50,root)
     setup = Menu()
@@ -50,6 +71,7 @@ def getMenus(shutdown):
     progress.addLine(MenuEntry('back',testMenu))
     root.addLine(MenuEntry('Setup',setup))
     root.addLine(MenuEntry('Test Menu',testMenu))
+    root.addLine(MenuEntry('Images',get_setups(config)))
     root.addLine(MenuLine('Exit',shutdown))
     testMenu.addLine(MenuEntry('Test Loader',load))
     testMenu.addLine(MenuEntry('Test Progress',progress))
