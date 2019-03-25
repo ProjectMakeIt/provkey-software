@@ -30,22 +30,6 @@ def disk_render():
     cmd = "df -h | awk '$NF==\"/\"{printf \"Disk: %d/%dGB %s\", $3,$2,$5}'"
     return subprocess.check_output(cmd, shell = True)
 
-def disable_usb_network():
-    cmd = "sudo ifconfig usb0 down"
-    os.system(cmd)
-
-def enable_usb_network():
-    cmd = "sudo ifconfig usb0 up"
-    os.system(cmd)
-
-def disable_wifi_network():
-    cmd = "sudo ifconfig wlan0 down"
-    os.system(cmd)
-
-def enable_wifi_network():
-    cmd = "sudo ifconfig wlan0 up"
-    os.system(cmd)
-
 def enable_gadget():
     gadget.enable()
 
@@ -56,7 +40,6 @@ def getMenus(shutdown):
     root = Menu()
     load = LoaderMenu('images/scale.bmp',50,root)
     setup = Menu()
-    network = Menu()
     usb = Menu()
     info = Menu(True,4)
     testMenu = Menu()
@@ -82,14 +65,8 @@ def getMenus(shutdown):
     testMenu.addLine('Test12')
     testMenu.addLine(MenuEntry('back',root))
     setup.addLine(MenuEntry('Status',info))
-    setup.addLine(MenuEntry('Network',network))
     setup.addLine(MenuEntry('Gadget',usb))
     setup.addLine(MenuEntry('back',root))
-    network.addLine(MenuLine('Wifi Off',disable_wifi_network))
-    network.addLine(MenuLine('Wifi On',enable_wifi_network))
-    network.addLine(MenuLine('Usb Off',disable_usb_network))
-    network.addLine(MenuLine('Usb On',enable_usb_network))
-    network.addLine(MenuEntry('back',setup))
     usb.addLine(MenuLine('Enable Gadget',enable_gadget))
     usb.addLine(MenuLine('Disable Gadget',disable_gadget))
     usb.addLine(MenuEntry('back',setup))
