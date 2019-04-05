@@ -5,7 +5,7 @@ import subprocess
 
 import signal
 
-from libs.menu import Menu, PyGameMenuController, MenuLine, MenuEntry, MenuText, MenuCustom, ProgressLine, LoaderMenu
+from libs.menu import Menu, PyGameMenuController, MenuLine, MenuEntry, MenuText, MenuCustom, ProgressLine, LoaderMenu, TitleMenu
 from libs.progress import ProgressImage
 from libs.config import Config, ConfigJson
 
@@ -55,6 +55,9 @@ def setupConfig():
     if os.path.exists('config.json'):
         config.load()
     return config
+
+def titleLine():
+    return "Test Title Screen"
     
 def getMenus(shutdown):
     config = setupConfig()
@@ -63,7 +66,8 @@ def getMenus(shutdown):
     setup = Menu()
     usb = Menu()
     info = Menu(True,4)
-    testMenu = Menu()
+    testMenu = TitleMenu('Test Menu')
+    testTitleMenu = TitleMenu(MenuCustom(titleLine))
     progress = Menu()
     progressLine = ProgressLine(10)
     progressLine.update(9)
@@ -75,7 +79,7 @@ def getMenus(shutdown):
     root.addLine(MenuLine('Exit',shutdown))
     testMenu.addLine(MenuEntry('Test Loader',load))
     testMenu.addLine(MenuEntry('Test Progress',progress))
-    testMenu.addLine('Test3')
+    testMenu.addLine(MenuEntry('Test Title',testTitleMenu))
     testMenu.addLine('Test4')
     testMenu.addLine('Test5')
     testMenu.addLine('Test6')
@@ -86,6 +90,8 @@ def getMenus(shutdown):
     testMenu.addLine('Test11')
     testMenu.addLine('Test12')
     testMenu.addLine(MenuEntry('back',root))
+    testTitleMenu.addLine('Test1')
+    testTitleMenu.addLine(MenuEntry('back',testMenu))
     setup.addLine(MenuEntry('Status',info))
     setup.addLine(MenuEntry('Gadget',usb))
     setup.addLine(MenuEntry('back',root))

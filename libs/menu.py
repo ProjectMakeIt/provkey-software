@@ -8,7 +8,7 @@ from progress import ProgressImage
 font = ImageFont.load_default()
 
 class Menu:
-  def __init__(self,navigatable=True,firstEntry=0):
+  def __init__(self,height=6,navigatable=True,firstEntry=0):
     self.lines=[]
     self.selectable=[]
     self.firstEntry=firstEntry
@@ -16,11 +16,12 @@ class Menu:
     self.navigatable=navigatable
     self.img = Image.new('1', (128,64))
     self.firstLine = 0
+    self.height=height
   def reset(self):
     self.currentLine=self.firstEntry
     self.firstLine = 0
-    if self.firstLine<self.currentLine-5:
-        self.firstLine=self.currentLine-5
+    if self.firstLine<self.currentLine-(self.height-1):
+        self.firstLine=self.currentLine-(self.height-1)
   def addLine(self,line,selectable=True):
     self.lines.append(line)
     self.selectable.append(selectable)
@@ -28,8 +29,8 @@ class Menu:
     if not self.navigatable:
       return
     self.currentLine+=1
-    if self.firstLine<self.currentLine-5:
-        self.firstLine=self.currentLine-5
+    if self.firstLine<self.currentLine-(self.height-1):
+        self.firstLine=self.currentLine-(self.height-1)
     if self.currentLine>len(self.lines)-1:
       self.currentLine=0
       self.firstLine=0
@@ -43,10 +44,10 @@ class Menu:
         self.firstLine=self.currentLine
     if self.currentLine<0:
       self.currentLine=len(self.lines)-1
-      if len(self.lines)-6<0:
+      if len(self.lines)-(self.height)<0:
         self.firstLine=0
       else:
-        self.firstLine=len(self.lines)-6
+        self.firstLine=len(self.lines)-(self.height)
     if not self.selectable[self.currentLine]:
       self.up()
   def enter(self,ctl):
@@ -57,7 +58,7 @@ class Menu:
     draw = ImageDraw.Draw(self.img)
     draw.rectangle((0,0,128,64), outline=0, fill=0)
     selectLine = self.currentLine-self.firstLine
-    for i in xrange(0,6) :
+    for i in xrange(0,self.height) :
       if len(self.lines)-1 < i:
           continue
       line = self.lines[i+self.firstLine]
@@ -81,6 +82,41 @@ class Menu:
     return self.currentLine
   def setPos(self,line):
     self.currentLine=line
+
+class TitleMenu(Menu):
+  def __init__(self,title,height=6,navigatable=True,firstEntry=0):
+    Menu.__init__(self,height-1,navigatable,firstEntry)
+    self.title=title
+  def render(self):
+    draw = ImageDraw.Draw(self.img)
+    draw.rectangle((0,0,128,64), outline=0, fill=0)
+    if isinstance(self.title,MenuLine):
+      image = self.title.render(True)
+      self.img.paste(image,(0,-1))
+    else:
+      draw.rectangle((0,0,128,9), outline=0, fill=1)
+      draw.text((3, -1), str(self.title), font=font, fill=0)
+    selectLine = self.currentLine-self.firstLine
+    for i in xrange(0,self.height) :
+      if len(self.lines)-1 < i:
+          continue
+      line = self.lines[i+self.firstLine]
+      if selectLine==i:
+        box=255
+        text=0
+      else:
+        box=0
+        text=255
+      if isinstance(line,MenuLine):
+        image=line.render(selectLine==i)
+        mask = Image.new('1',(128,64))
+        maskDraw = ImageDraw.Draw(mask)
+        maskDraw.rectangle((0,((i+1)*10),128,((i+1)*10)+10), outline=0, fill=255)
+        self.img.paste(image,(0,((i+1)*10)))
+      else:
+        draw.rectangle((0,((i+1)*10),128,((i+1)*10)+10), outline=0, fill=box)
+        draw.text((3, (i+1)*10), str(line), font=font, fill=text)
+    return self.img
 
 class LoaderMenu(Menu):
   def __init__(self,image,count,nextMenu):
