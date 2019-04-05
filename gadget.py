@@ -1,14 +1,42 @@
 import os
+import gadgetpy
+import gadgetFake
 
-GADGET_URL = "/sys/kernel/config/usb_gadget"
-device_base = os.path.join(GADGET_URL, 'provkey')
+def initPi():
+    global gadget
+    global fs
+    global network
+    gadget = gadgetpy.Gadget('provkey')
+    fs = gadgetpy.MassStorage('usb0')
+    network = gadgetpy.Network('usb0')
+    config = gadgetpy.Config('c.1')
+    gadget.addFunction(fs)
+    gadget.addFunction(network)
+    gadget.addConfig(config)
+    config.addFunction(fs)
+    gadget.addFunction(network)
+    gadget.write()
+
+def initDesktop():
+    global gadget
+    global fs
+    global network
+    gadget = gadgetFake.FakeGadget('provkey')
+    fs = gadgetFake.FakeMassStorage('usb0')
+    network = gadgetFake.FakeNetwork('usb0')
+
+pointer = ""
+
+def setUSB(point):
+    pointer = point
 
 def disable():
-    os.system('echo "" > %s' % os.path.join(device_base, 'UDC'))    
+    gadget.deactivate()
+
 def enable():
-    os.system('ls /sys/class/udc > %s' % os.path.join(device_base, 'UDC'))    
+    gadget.activate(pointer)
 
 def changeImage(filename):
-    disable()
-    os.system('echo "'+filename+'" > %s' % os.path.join(device_base, 'functions','mass_storage.usb0','lun.0','file'))
-    enable()
+    gadget.deactivate()
+    fs.image = filename
+    gadget.activate(pointer)

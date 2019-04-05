@@ -1,5 +1,6 @@
 import time
 import signal
+import gadget
 
 from menus import getMenus
 from libs.menu import PyGameMenuController
@@ -10,6 +11,7 @@ def killhandle(signum, frame):
 def shutdown():
     killhandle(0,0);
 
+gadget.initDesktop()
 load = getMenus(shutdown)
 controller = PyGameMenuController(load)
 load.setCtl(controller)

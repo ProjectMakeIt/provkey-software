@@ -1,5 +1,6 @@
 import time,os
 import signal
+import gadget
 
 from RPi import GPIO
 
@@ -17,6 +18,7 @@ def shutdown():
     killhandle(0,0);
 
 
+gadget.initPi()
 load = getMenus(shutdown)
 disp = Adafruit_SSD1306.SSD1306_128_64(rst=24)
 controller = OledMenuController(load,disp,17,22,5,6)
